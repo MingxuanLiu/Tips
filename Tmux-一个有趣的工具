@@ -1,0 +1,8 @@
+tmux new -s foo # 新建名称为 foo 的会话
+tmux ls # 列出所有 tmux 会话
+tmux a # 恢复至上一次的会话
+tmux a -t foo # 恢复名称为 foo 的会话，会话默认名称为数字
+tmux kill-session -t foo # 删除名称为 foo 的会话
+tmux kill-server # 删除所有的会话
+
+终于可以让代码的不停地跑了，开心!!!!
