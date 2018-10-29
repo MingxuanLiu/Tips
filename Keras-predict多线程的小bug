@@ -1,0 +1,36 @@
+目标是想把训练好的一个神经网络的模型放在另一台服务器上通过TCP请求提供服务。
+
+当在运行evaluate_txt.py的model.predict()函数时出现了如下报错：
+ValueError: Tensor Tensor("dense_2/Softmax:0", shape=(?, 8), dtype=float32) is not an element of this graph.
+
+因为以前在自己的服务器上跑的好好的，从来没有在predict上出现过问题，这个问题真的困扰了好久。
+查了好多解释，虽然有很多人都遇到了这个问题，但是，很多解决方案试了一下也并不能解决问题，同时也并不清楚到底是哪里出现了问题。
+
+但是，在日常查google解决这个问题的过程中，偶然发现了一个知乎，简直醍醐灌顶。
+在这里贴上这个知乎的链接https://zhuanlan.zhihu.com/p/27101000
+
+一个叫“周智”的答主的答案真的是让我一下子get到了问题所在。
+因为在同一台服务器上还同时开着TCP的服务端，那么这两个线程是冲突的，而keras的predict的方法对于这种多线程的处理会报上述的错误。
+
+所以问题主要是针对的keras的多线程的问题。
+
+“周智”的答案指出：
+  需要在create/load_model的地方之后加上代码：
+      self.graph = tf.get_default_graph()
+  在使用model（也就是model.predict()）之前加上：
+       with self.graph.as_default():
+            (...do inference here...)
+
+但实际上，这样在我的代码中其实并不能跑通，因为这些调用并不是在类中，所以我把self都去掉了，变成了：
+   graph = tf.get_default_graph()
+   with graph.as_default():
+   
+然后就成功的跑通啦！！！！！
+
+当然，还有一个帖子我觉得说的也很在点：https://stackoverrun.com/cn/q/11246249
+提出在强化学习中，有一种算法叫做Asynchronous Advantage Actor Critics (A3C)，其中每个代理都依赖于同一个神经网络来告诉他们，他们应该在给定状态下应该做什么。
+换句话说，每个线程同时调用model.predict()。
+
+model._make_predict_function()是编译predict函数的函数，在多线程的设置中，需要手动调用此函数以提前编译predict，否则在第一次运行函数之前不会编译predict函数。
+
+虽然这个解决方案我没有用，但是感觉这个说的也很有道理，如果有小伙伴遇到了这个问题，可以尝试一下。
