@@ -1,3 +1,5 @@
+##Tmux
+
 tmux new -s foo # 新建名称为 foo 的会话
 tmux ls # 列出所有 tmux 会话
 tmux a # 恢复至上一次的会话
@@ -6,3 +8,77 @@ tmux kill-session -t foo # 删除名称为 foo 的会话
 tmux kill-server # 删除所有的会话
 
 终于可以让代码的不停地跑了，开心!!!!
+
+哇 原来tmux这么有趣的嘛!!!!
+
+##tmux分屏
+tmux快捷键是ctrl+b然后就可以：输入各种快捷键命令了
+在一个session中，可以有N个window，并且window可以在不同的session中移动
+#创建window
+Ctrl+b+c
+#删除window
+Ctrl+b+&
+#下一个window
+Ctrl+b n
+#上一个window
+Ctrl+b p
+#重命名window
+Ctrl+b ,
+#在多个window里搜索关键字
+Ctrl+b f
+#在相邻的两个window里切换
+Ctrl+b l
+
+##在window中可以有多个pane
+#创建pane
+横切split pane horizontal
+Ctrl+b ” (问号的上面，shift+’)
+在下面新建
+#竖切split pane vertical
+Ctrl+b % （shift+5）
+在右边新建
+#按顺序在pane之间移动
+Ctrl+b o
+#上下左右选择pane
+Ctrl+b 方向键上下左右
+#调整pane的大小
+Ctrl+b :resize-pane -U #向上
+Ctrl+b :resize-pane -D #向下
+Ctrl+b :resize-pane -L #向左
+Ctrl+b :resize-pane -R #向右
+在上下左右的调整里，最后的参数可以加数字 用以控制移动的大小，例如：
+Ctrl+b :resize-pane -D 50
+#在同一个window里左右移动pane
+Ctrl+b { （往左边，往上面）
+Ctrl+b } （往右边，往下面）
+#删除pane
+Ctrl+b x
+#更换pane排版
+Ctrl+b “空格”
+#移动pane至window
+Ctrl+b !
+#移动pane合并至某个window
+Ctrl+b :join-pane -t $window_name
+#显示pane编号
+Ctrl+b q
+#按顺序移动pane位置
+Ctrl+b Ctrl+o
+
+分屏后如果想用鼠标操作的话，就可以按照以下步骤配置
+1. vim ~/.tmux.conf
+2. 添加进这个文件中这几行指令
+setw -g mouse-resize-pane on
+setw -g mouse-select-pane on
+setw -g mouse-select-window on
+setw -g mode-mouse on
+#开启用鼠标拖动调节pane的大小（拖动位置是pane之间的分隔线） 
+#开启用鼠标点击pane来激活该pane 
+#开启用鼠标点击来切换活动window（点击位置是状态栏的窗口名称） 
+#开启window/pane里面的鼠标支持（也即可以用鼠标滚轮回滚显示窗口内容，此时还可以用鼠标选取文本）
+3. 然后再tmux里按ctrl+b然后：（也就是Ctrl+b后摁冒号，进入命令输入模式）
+4. 输入source ~/.tmux.conf 回车
+
+
+https://blog.csdn.net/fk1174/article/details/79220227
+https://www.jianshu.com/p/d988d2fa54ca
+https://blog.csdn.net/sinat_33098791/article/details/52386648
