@@ -1,0 +1,11 @@
+1.使用lsof 
+lsof -i:端口号查看某个端口是否被占用
+
+2.使用netstat 
+使用netstat -anp|grep 80 
+
+3. 杀掉进程
+kill -9 23153（进程的pid号）
+
+https://blog.csdn.net/hgg923/article/details/77141377
+https://blog.csdn.net/hsd2012/article/details/51384907
