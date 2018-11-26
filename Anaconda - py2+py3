@@ -1,0 +1,19 @@
+# Anaconda
+
+https://foofish.net/compatible-py2-and-py3.html
+
+# 基于 python3.6 创建一个名为test_py3 的环境
+conda create --name test_py3 python=3.6 
+
+# 基于 python2.7 创建一个名为test_py2 的环境
+conda create --name test_py2 python=2.7
+
+# 激活 test 环境
+activate test_py2  # windows
+source activate test_py2 # linux/mac
+
+# 切换到python3
+activate test_py3
+
+#  退出环境
+source deactivate test_py3
